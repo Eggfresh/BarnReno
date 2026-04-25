@@ -13,7 +13,7 @@
   --oak-light: #C4973A;
   --oak-pale: #F5EDD8;
   --bark: #3D2B1A;
-  --page-bg: #0A0806;
+  --page-bg: #2A1F12;
 }
 
 html { scroll-behavior: smooth; }
@@ -147,17 +147,17 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 /* ═══════════════════════════════════════
    PAIR LAYOUT — text LEFT, photos RIGHT
 ═══════════════════════════════════════ */
-.pair-section { padding-bottom: 2rem; }
+.pair-section { padding-bottom: 0.5rem; }
 
 .pair-block {
   max-width: 1540px;
   margin: 0 auto;
-  padding: 5rem 2.5rem;
+  padding: 2.25rem 2.5rem;
   display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 3.5rem;
-  align-items: center;          /* ← vertically centred */
-  border-bottom: 1px solid rgba(245,237,216,0.05);
+  grid-template-columns: 260px 1fr;
+  gap: 2.5rem;
+  align-items: center;
+  border-bottom: 1px solid rgba(245,237,216,0.07);
 }
 .pair-block:last-child { border-bottom: none; }
 
@@ -167,45 +167,40 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 }
 .side-pair-num {
   font-family: 'Playfair Display', serif;
-  font-size: 3.8rem; font-weight: 700;
-  /* readable warm gold instead of near-invisible */
-  color: rgba(196,151,58,0.28);
-  line-height: 1; margin-bottom: 0.4rem;
+  font-size: 2.8rem; font-weight: 700;
+  color: rgba(196,151,58,0.32);
+  line-height: 1; margin-bottom: 0.2rem;
   letter-spacing: -0.03em;
 }
 .side-title {
   font-family: 'Playfair Display', serif;
-  font-size: 1.25rem; font-weight: 700;
-  /* bright cream — max contrast on dark bg */
+  font-size: 1.1rem; font-weight: 700;
   color: #F5EDD8;
-  line-height: 1.25; margin-bottom: 0.75rem;
+  line-height: 1.25; margin-bottom: 0.5rem;
 }
 .side-rule {
-  width: 28px; height: 1.5px;
+  width: 24px; height: 1.5px;
   background: var(--oak-light);
-  border-radius: 1px; margin-bottom: 1rem;
+  border-radius: 1px; margin-bottom: 0.65rem;
   opacity: 0.6;
 }
 .side-desc {
-  font-size: 0.875rem; line-height: 1.85;
-  /* lifted from 0.42 → 0.72 — clearly readable */
+  font-size: 0.82rem; line-height: 1.7;
   color: rgba(235,220,195,0.72);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.9rem;
 }
 .side-after-box {
   border: 1px solid rgba(107,158,128,0.35);
-  border-radius: 4px; padding: 1rem 1.1rem;
+  border-radius: 4px; padding: 0.7rem 0.9rem;
   background: rgba(107,158,128,0.08);
 }
 .side-after-label {
   font-size: 9px; font-weight: 500;
   letter-spacing: 0.2em; text-transform: uppercase;
-  /* brighter green label */
-  color: #7EC49A; margin-bottom: 0.55rem;
+  color: #7EC49A; margin-bottom: 0.35rem;
 }
 .side-after-text {
-  font-size: 0.84rem; line-height: 1.8;
-  /* lifted from 0.65 → 0.85 */
+  font-size: 0.8rem; line-height: 1.65;
   color: rgba(178,225,198,0.85);
   font-style: italic;
 }
@@ -315,16 +310,15 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
 /* ── Large tablet / small desktop ── */
 @media (max-width: 1200px) {
   .pair-block {
-    grid-template-columns: 240px 1fr;
-    gap: 2.5rem;
-    padding: 4rem 2rem;
+    grid-template-columns: 220px 1fr;
+    gap: 2rem;
+    padding: 2rem 1.75rem;
   }
-  .photo-slot { height: 300px; }
+  .photo-slot { height: 280px; }
 }
 
 /* ── Tablet portrait / large phone landscape ── */
 @media (max-width: 900px) {
-  /* hero: stack panels vertically */
   .hero {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3, 1fr);
@@ -332,65 +326,47 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
   }
   .hero-panel { height: auto; }
   .hero-panel + .hero-panel::before {
-    /* horizontal divider instead of vertical */
     top: 0; bottom: auto; left: 10%; right: 10%;
     width: auto; height: 1px;
   }
   .hpl-word { font-size: clamp(1.2rem, 5vw, 1.8rem); }
-
-  /* phase bar: hide subtitle, shrink */
   .phase-sub { display: none; }
   .phase-tab { padding: 10px 0.75rem; gap: 7px; }
-
-  /* pair blocks: text above photos */
   .pair-block {
     grid-template-columns: 1fr;
-    gap: 1.75rem;
-    padding: 3rem 1.5rem;
+    gap: 1.25rem;
+    padding: 2rem 1.5rem;
   }
-  .side-pair-num { font-size: 2.8rem; }
-  .side-title { font-size: 1.15rem; }
-
-  /* photos: 3-wide but shorter */
+  .side-pair-num { font-size: 2.2rem; }
+  .side-title { font-size: 1.05rem; }
   .photo-slot { height: 220px; }
   .pb-word { font-size: 0.95rem; }
 }
 
 /* ── Mobile portrait ── */
 @media (max-width: 600px) {
-  /* hero: 3 stacked full-screen panels */
   .hero {
     height: auto;
     min-height: 100svh;
     grid-template-rows: 33.33svh 33.33svh 33.33svh;
   }
   .hero-title { font-size: clamp(2.2rem, 10vw, 3.5rem); }
-
-  /* phase bar: icon + word only, tighter */
   .phase-tab { padding: 9px 0.5rem; gap: 5px; }
   .phase-word { font-size: 0.85rem; }
-
-  /* pair block */
-  .pair-block { padding: 2.5rem 1.25rem; gap: 1.5rem; }
-  .side-pair-num { font-size: 2.2rem; margin-bottom: 0.25rem; }
-  .side-title { font-size: 1.05rem; }
-  .side-desc { font-size: 0.82rem; }
-  .side-after-text { font-size: 0.8rem; }
-
-  /* photos: stack into a single column */
-  .triplet {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  .photo-slot { height: 260px; }
-  /* on mobile each photo is full-width so make badges slightly smaller */
-  .pb-word { font-size: 1.1rem; }
+  .pair-block { padding: 1.75rem 1.1rem; gap: 1.1rem; }
+  .side-pair-num { font-size: 1.8rem; margin-bottom: 0.15rem; }
+  .side-title { font-size: 1rem; }
+  .side-desc { font-size: 0.8rem; }
+  .side-after-text { font-size: 0.78rem; }
+  .triplet { grid-template-columns: 1fr; gap: 7px; }
+  .photo-slot { height: 240px; }
+  .pb-word { font-size: 1.05rem; }
 }
 
-/* ── Very small phones (320px) ── */
+/* ── Very small phones ── */
 @media (max-width: 380px) {
-  .pair-block { padding: 2rem 1rem; }
-  .photo-slot { height: 220px; }
+  .pair-block { padding: 1.5rem 0.9rem; }
+  .photo-slot { height: 200px; }
   .phase-word { font-size: 0.75rem; }
   .phase-dot { width: 5px; height: 5px; }
 }
@@ -458,10 +434,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
       <div class="side-pair-num">01</div>
       <div class="side-title">Roof, Eavestrough & Garage Extension</div>
       <div class="side-rule"></div>
-      <p class="side-desc">The old roof was the barn's most pressing problem — a liability that made everything underneath uncertain. New roofing, proper eavestroughing, and the garage extension change the fundamental character of the building from the moment you arrive.</p>
+      <p class="side-desc">New roofing, proper eavestroughing, and the garage extension transform the barn's curb appeal and make everything underneath weather-tight.</p>
       <div class="side-after-box">
         <div class="side-after-label">What it could be</div>
-        <p class="side-after-text">A protected, weather-tight structure that sets the tone for everything inside — a barn that looks cared for from the road and earns trust before anyone steps through the door.</p>
+        <p class="side-after-text">A protected structure that earns trust on arrival — before anyone steps through the door.</p>
       </div>
     </div>
     <div class="triplet">
@@ -487,10 +463,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
       <div class="side-pair-num">02</div>
       <div class="side-title">Six New Windows & New Roof Line</div>
       <div class="side-rule"></div>
-      <p class="side-desc">The second set of six windows along the right side of the barn transforms what was a dark interior into a space flooded with natural light. Paired with the new roof and eavestrough, the whole right face of the barn reads as intentional rather than incidental.</p>
+      <p class="side-desc">Six windows along the right side of the barn flood a once-dark interior with natural light. Paired with the new roof, the whole face reads as intentional.</p>
       <div class="side-after-box">
         <div class="side-after-label">What it could be</div>
-        <p class="side-after-text">Light is the one thing you can't retrofit into a space cheaply. This barn already has it — six windows of golden afternoon light that make any interior use, from events to studios to rentals, instantly more valuable.</p>
+        <p class="side-after-text">Golden afternoon light you can't retrofit cheaply — instantly adding value to any interior use.</p>
       </div>
     </div>
     <div class="triplet">
@@ -516,10 +492,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
       <div class="side-pair-num">03</div>
       <div class="side-title">Tractor Shed → Three Covered Bays</div>
       <div class="side-rule"></div>
-      <p class="side-desc">Barely holding together, the old tractor shed was one hard winter away from becoming a problem. What's taken its place is three distinct covered bays — one for the tractor, one for the car, one for tools — each properly sheltered from snow and rain under a new roof.</p>
+      <p class="side-desc">One crumbling shed becomes three distinct covered bays — tractor, car, and tools — each properly sheltered under a new roof built for Ontario winters.</p>
       <div class="side-after-box">
         <div class="side-after-label">What it could be</div>
-        <p class="side-after-text">A fully functional outbuilding that pays for itself in protected storage alone — and makes the whole property feel organised, deliberate, and ready for whatever comes next.</p>
+        <p class="side-after-text">A fully functional outbuilding that makes the whole property feel organised and ready for anything.</p>
       </div>
     </div>
     <div class="triplet">
@@ -545,10 +521,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
       <div class="side-pair-num">04</div>
       <div class="side-title">Living Room, Fireplace & Kitchen</div>
       <div class="side-rule"></div>
-      <p class="side-desc">Inside the barn, the living space has gone from raw and rough to something that actually feels like a room — a fireplace anchoring one end, a kitchen taking shape, the whole space gaining the warmth and function that makes people want to stay.</p>
+      <p class="side-desc">A fireplace anchoring one end, a kitchen taking shape — the interior has gone from raw barn to a space people actually want to spend time in.</p>
       <div class="side-after-box">
         <div class="side-after-label">What it could be</div>
-        <p class="side-after-text">A main living area that's genuinely comfortable — the kind of space that makes guests extend their stay. A fireplace in a barn with exposed beams is not a detail. It's the whole reason to come.</p>
+        <p class="side-after-text">A warm, comfortable main space that keeps guests staying longer than they planned.</p>
       </div>
     </div>
     <div class="triplet">
@@ -574,10 +550,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
       <div class="side-pair-num">05</div>
       <div class="side-title">Activity Space — Games, Climbing & Yoga</div>
       <div class="side-rule"></div>
-      <p class="side-desc">A cleaned-up interior reveals just how much volume this barn has — ceiling height that most purpose-built gyms can't match, and a floor plan flexible enough to host a bouldering wall, a yoga studio, or a games room without picking just one.</p>
+      <p class="side-desc">Ceiling height most gyms can't match, and a floor plan flexible enough for a bouldering wall, yoga studio, or games room — all in the same space.</p>
       <div class="side-after-box">
         <div class="side-after-label">What it could be</div>
-        <p class="side-after-text">An activity space that's genuinely rare — a barn-sized room where you can actually do things. Rock climbing, yoga, table tennis, billiards. The kind of amenity that turns a property into a destination.</p>
+        <p class="side-after-text">The kind of amenity that turns a property visit into a destination people plan around.</p>
       </div>
     </div>
     <div class="triplet">
@@ -603,10 +579,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
       <div class="side-pair-num">06</div>
       <div class="side-title">Games Hall & Projector Cinema</div>
       <div class="side-rule"></div>
-      <p class="side-desc">A large open floor with thick walls and no neighbours — practically designed for a projector screen and surround sound. Add a games area alongside it and you have a space that handles a family of twenty as easily as a quiet evening for two.</p>
+      <p class="side-desc">Thick walls, a large open floor, and no neighbours — practically built for a projector screen. A games area alongside it handles twenty people as easily as two.</p>
       <div class="side-after-box">
         <div class="side-after-label">What it could be</div>
-        <p class="side-after-text">A private cinema and games hall that no rental property in the region can offer at this scale. The feature that ends up in every five-star review and every reason a guest books again the following year.</p>
+        <p class="side-after-text">The feature that ends up in every five-star review and every reason a guest comes back.</p>
       </div>
     </div>
     <div class="triplet">
@@ -632,10 +608,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
       <div class="side-pair-num">07</div>
       <div class="side-title">Ground Level — Paved Floor & Workshop</div>
       <div class="side-rule"></div>
-      <p class="side-desc">The ground level of the barn gets paved — instantly transforming a dirt floor into a proper workspace. Storage units and a dedicated workshop area give the building the infrastructure it's needed. Functional, clean, and built to last.</p>
+      <p class="side-desc">Paved ground level turns a dirt floor into a proper workspace overnight. Storage units and a dedicated workshop give the building the infrastructure it's needed for years.</p>
       <div class="side-after-box">
         <div class="side-after-label">What it could be</div>
-        <p class="side-after-text">A serious workshop and storage level that adds genuine utility to the property — for woodworking, tools, seasonal equipment, or rented studio space. The kind of infrastructure that makes a property actually work year-round.</p>
+        <p class="side-after-text">A year-round workshop and storage level — usable, rentable, and genuinely functional.</p>
       </div>
     </div>
     <div class="triplet">
@@ -661,10 +637,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: va
       <div class="side-pair-num">08</div>
       <div class="side-title">Paved Entry & Organised Car Access</div>
       <div class="side-rule"></div>
-      <p class="side-desc">The entry to the property tells the story before anything else does. A paved car area clears the ground, defines the space, and gives the eye somewhere to rest. Organisation at the entry point opens up possibilities for how the whole property flows and functions.</p>
+      <p class="side-desc">A paved entry defines the space, clears the clutter, and gives the property the clean arrival it deserves — room to park, room to think, room to grow.</p>
       <div class="side-after-box">
         <div class="side-after-label">What it could be</div>
-        <p class="side-after-text">A clean, intentional arrival that signals this is a property that has been thought through. Room to park, room to plan, room to grow — the blank-slate clarity that lets the next chapter of the barn actually begin.</p>
+        <p class="side-after-text">A deliberate arrival that signals the property has been properly thought through.</p>
       </div>
     </div>
     <div class="triplet">
