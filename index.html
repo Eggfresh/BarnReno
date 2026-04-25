@@ -1,0 +1,704 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Old Barn — A Renovation Story</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --oak-light: #C4973A;
+  --oak-pale: #F5EDD8;
+  --bark: #3D2B1A;
+  --page-bg: #0A0806;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: var(--oak-pale); overflow-x: hidden; }
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  overflow: hidden;
+}
+
+.hero-panel {
+  position: relative;
+  overflow: hidden;
+}
+.hero-panel img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 9s ease;
+}
+.hero-panel:hover img { transform: scale(1.05); }
+
+.hero-panel::after {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.hp-before::after { background: linear-gradient(to top, rgba(20,10,3,0.82) 0%, rgba(20,10,3,0.18) 55%, transparent 100%); }
+.hp-now::after    { background: linear-gradient(to top, rgba(60,40,5,0.78) 0%, rgba(60,40,5,0.15) 55%, transparent 100%); }
+.hp-after::after  { background: linear-gradient(to top, rgba(10,30,18,0.78) 0%, rgba(10,30,18,0.15) 55%, transparent 100%); }
+
+.hero-panel + .hero-panel::before {
+  content: '';
+  position: absolute; left: 0; top: 10%; bottom: 10%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(245,237,216,0.15) 40%, rgba(245,237,216,0.15) 60%, transparent);
+  z-index: 3;
+}
+
+.hero-phase-label {
+  position: absolute;
+  bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  text-align: center; pointer-events: none;
+}
+.hpl-word {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3.8vw, 3.2rem);
+  font-weight: 700; line-height: 1;
+  opacity: 0; animation: fadeUp 0.9s forwards;
+}
+.hp-before .hpl-word { color: #E8C97A; animation-delay: 0.25s; }
+.hp-now    .hpl-word { color: #F0D590; animation-delay: 0.45s; }
+.hp-after  .hpl-word { color: #A8D4B8; animation-delay: 0.65s; }
+
+.hpl-rule { width: 28px; height: 2px; border-radius: 1px; opacity: 0; animation: fadeUp 0.8s forwards; }
+.hp-before .hpl-rule { background: #C4973A; animation-delay: 0.3s; }
+.hp-now    .hpl-rule { background: #D4A830; animation-delay: 0.5s; }
+.hp-after  .hpl-rule { background: #6B9E80; animation-delay: 0.7s; }
+
+.hero-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 5; pointer-events: none;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 8vw, 7.5rem);
+  font-weight: 700; color: var(--oak-pale);
+  text-align: center; line-height: 0.9;
+  letter-spacing: -0.025em;
+  text-shadow: 0 2px 48px rgba(0,0,0,0.6);
+  opacity: 0; animation: fadeUp 1s 0.05s forwards;
+}
+.hero-title em { display: block; font-style: italic; color: var(--oak-light); }
+
+.scroll-cue {
+  position: absolute; bottom: 2rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  z-index: 6;
+  opacity: 0; animation: fadeUp 0.9s 1.3s forwards;
+}
+.scroll-cue span { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,237,216,0.4); }
+.scroll-line { width: 1px; height: 44px; background: linear-gradient(to bottom, rgba(196,151,58,0.55), transparent); animation: scrollPulse 2.2s 1.8s infinite; }
+
+/* ═══════════════════════════════════════
+   STICKY PHASE BAR
+═══════════════════════════════════════ */
+.phase-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  background: rgba(10,8,6,0.96);
+  border-bottom: 1px solid rgba(245,237,216,0.06);
+  backdrop-filter: blur(8px);
+  position: sticky; top: 0; z-index: 50;
+}
+.phase-tab {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; padding: 13px 1rem;
+  border-right: 1px solid rgba(245,237,216,0.05);
+}
+.phase-tab:last-child { border-right: none; }
+.phase-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.pd-before { background: #C4973A; }
+.pd-now    { background: #D4A830; }
+.pd-after  { background: #6B9E80; }
+.phase-word {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(0.85rem, 1.8vw, 1.2rem); font-weight: 700;
+}
+.pw-before { color: #C4973A; }
+.pw-now    { color: #D4A830; }
+.pw-after  { color: #6B9E80; }
+.phase-sub { font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase; }
+.ps-before { color: rgba(196,151,58,0.45); }
+.ps-now    { color: rgba(212,168,48,0.45); }
+.ps-after  { color: rgba(107,158,128,0.45); }
+
+/* ═══════════════════════════════════════
+   PAIR LAYOUT — text LEFT, photos RIGHT
+═══════════════════════════════════════ */
+.pair-section { padding-bottom: 2rem; }
+
+.pair-block {
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 5rem 2.5rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 3.5rem;
+  align-items: center;          /* ← vertically centred */
+  border-bottom: 1px solid rgba(245,237,216,0.05);
+}
+.pair-block:last-child { border-bottom: none; }
+
+/* ── LEFT: text panel ── */
+.side-panel {
+  display: flex; flex-direction: column; gap: 0;
+}
+.side-pair-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.8rem; font-weight: 700;
+  /* readable warm gold instead of near-invisible */
+  color: rgba(196,151,58,0.28);
+  line-height: 1; margin-bottom: 0.4rem;
+  letter-spacing: -0.03em;
+}
+.side-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem; font-weight: 700;
+  /* bright cream — max contrast on dark bg */
+  color: #F5EDD8;
+  line-height: 1.25; margin-bottom: 0.75rem;
+}
+.side-rule {
+  width: 28px; height: 1.5px;
+  background: var(--oak-light);
+  border-radius: 1px; margin-bottom: 1rem;
+  opacity: 0.6;
+}
+.side-desc {
+  font-size: 0.875rem; line-height: 1.85;
+  /* lifted from 0.42 → 0.72 — clearly readable */
+  color: rgba(235,220,195,0.72);
+  margin-bottom: 1.5rem;
+}
+.side-after-box {
+  border: 1px solid rgba(107,158,128,0.35);
+  border-radius: 4px; padding: 1rem 1.1rem;
+  background: rgba(107,158,128,0.08);
+}
+.side-after-label {
+  font-size: 9px; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  /* brighter green label */
+  color: #7EC49A; margin-bottom: 0.55rem;
+}
+.side-after-text {
+  font-size: 0.84rem; line-height: 1.8;
+  /* lifted from 0.65 → 0.85 */
+  color: rgba(178,225,198,0.85);
+  font-style: italic;
+}
+
+/* ── RIGHT: three photos ── */
+.triplet {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  align-items: center;          /* ← photos line up at centre */
+}
+
+.photo-slot {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+.photo-slot:hover { transform: scale(1.008); }
+
+/* all slots same fixed height so they're perfectly in line */
+.photo-slot { height: 340px; }
+
+.photo-slot img {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  position: absolute; inset: 0;
+}
+
+.slot-before { background: #160E06; }
+.slot-now    { background: #1A1204; }
+.slot-after  { background: #0A1210; }
+
+/* bottom gradient on each photo */
+.photo-slot::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.52) 0%, transparent 45%);
+  pointer-events: none; z-index: 2;
+}
+
+/* phase badge — top-left of each photo */
+.phase-badge {
+  position: absolute; top: 0; left: 0; z-index: 3;
+  display: flex; flex-direction: column;
+  padding: 13px 15px 9px;
+  gap: 4px;
+  background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, transparent 70%);
+  border-radius: 6px 0 0 0;
+  pointer-events: none;
+}
+.pb-word {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(0.95rem, 1.8vw, 1.5rem);
+  font-weight: 700; line-height: 1; letter-spacing: 0.01em;
+}
+.pb-before { color: #E8C97A; }
+.pb-now    { color: #F0D590; }
+.pb-after  { color: #A8D4B8; }
+.pb-line { height: 2px; width: 20px; border-radius: 1px; }
+.pbl-before { background: #C4973A; }
+.pbl-now    { background: #D4A830; }
+.pbl-after  { background: #6B9E80; }
+
+/* pair number bottom-right of first photo */
+.photo-num {
+  position: absolute; bottom: 10px; right: 12px; z-index: 4;
+  font-family: 'Playfair Display', serif;
+  font-size: 11px; color: rgba(245,237,216,0.3);
+  letter-spacing: 0.08em; pointer-events: none;
+}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.footer {
+  border-top: 1px solid rgba(245,237,216,0.06);
+  padding: 3.5rem 2rem; text-align: center;
+}
+.footer-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem; color: rgba(245,237,216,0.35);
+}
+.footer-divider { width: 30px; height: 1px; background: rgba(196,151,58,0.18); margin: 1.2rem auto; }
+.footer-bottom { font-size: 0.7rem; color: rgba(245,237,216,0.12); letter-spacing: 0.1em; }
+
+/* ═══════════════════════════════════════
+   REVEAL + ANIMATIONS
+═══════════════════════════════════════ */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scrollPulse {
+  0%,100% { opacity: 0.3; } 50% { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+
+/* ── Large tablet / small desktop ── */
+@media (max-width: 1200px) {
+  .pair-block {
+    grid-template-columns: 240px 1fr;
+    gap: 2.5rem;
+    padding: 4rem 2rem;
+  }
+  .photo-slot { height: 300px; }
+}
+
+/* ── Tablet portrait / large phone landscape ── */
+@media (max-width: 900px) {
+  /* hero: stack panels vertically */
+  .hero {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    height: 100svh;
+  }
+  .hero-panel { height: auto; }
+  .hero-panel + .hero-panel::before {
+    /* horizontal divider instead of vertical */
+    top: 0; bottom: auto; left: 10%; right: 10%;
+    width: auto; height: 1px;
+  }
+  .hpl-word { font-size: clamp(1.2rem, 5vw, 1.8rem); }
+
+  /* phase bar: hide subtitle, shrink */
+  .phase-sub { display: none; }
+  .phase-tab { padding: 10px 0.75rem; gap: 7px; }
+
+  /* pair blocks: text above photos */
+  .pair-block {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    padding: 3rem 1.5rem;
+  }
+  .side-pair-num { font-size: 2.8rem; }
+  .side-title { font-size: 1.15rem; }
+
+  /* photos: 3-wide but shorter */
+  .photo-slot { height: 220px; }
+  .pb-word { font-size: 0.95rem; }
+}
+
+/* ── Mobile portrait ── */
+@media (max-width: 600px) {
+  /* hero: 3 stacked full-screen panels */
+  .hero {
+    height: auto;
+    min-height: 100svh;
+    grid-template-rows: 33.33svh 33.33svh 33.33svh;
+  }
+  .hero-title { font-size: clamp(2.2rem, 10vw, 3.5rem); }
+
+  /* phase bar: icon + word only, tighter */
+  .phase-tab { padding: 9px 0.5rem; gap: 5px; }
+  .phase-word { font-size: 0.85rem; }
+
+  /* pair block */
+  .pair-block { padding: 2.5rem 1.25rem; gap: 1.5rem; }
+  .side-pair-num { font-size: 2.2rem; margin-bottom: 0.25rem; }
+  .side-title { font-size: 1.05rem; }
+  .side-desc { font-size: 0.82rem; }
+  .side-after-text { font-size: 0.8rem; }
+
+  /* photos: stack into a single column */
+  .triplet {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .photo-slot { height: 260px; }
+  /* on mobile each photo is full-width so make badges slightly smaller */
+  .pb-word { font-size: 1.1rem; }
+}
+
+/* ── Very small phones (320px) ── */
+@media (max-width: 380px) {
+  .pair-block { padding: 2rem 1rem; }
+  .photo-slot { height: 220px; }
+  .phase-word { font-size: 0.75rem; }
+  .phase-dot { width: 5px; height: 5px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-panel hp-before">
+    <img src="FrontBarnOld.png" alt="Barn before">
+    <div class="hero-phase-label">
+      <div class="hpl-word">Before</div>
+      <div class="hpl-rule"></div>
+    </div>
+  </div>
+  <div class="hero-panel hp-now">
+    <img src="FrontBarnNow.png" alt="Barn now">
+    <div class="hero-phase-label">
+      <div class="hpl-word">Now</div>
+      <div class="hpl-rule"></div>
+    </div>
+  </div>
+  <div class="hero-panel hp-after">
+    <img src="FrontBarn.png" alt="Barn potential">
+    <div class="hero-phase-label">
+      <div class="hpl-word">After</div>
+      <div class="hpl-rule"></div>
+    </div>
+  </div>
+  <div class="hero-overlay">
+    <h1 class="hero-title">The Old Barn<em>Reimagined</em></h1>
+  </div>
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══ PHASE BAR ══ -->
+<div class="phase-bar">
+  <div class="phase-tab">
+    <div class="phase-dot pd-before"></div>
+    <span class="phase-word pw-before">Before</span>
+    <span class="phase-sub ps-before">The starting point</span>
+  </div>
+  <div class="phase-tab">
+    <div class="phase-dot pd-now"></div>
+    <span class="phase-word pw-now">Now</span>
+    <span class="phase-sub ps-now">Work in progress</span>
+  </div>
+  <div class="phase-tab">
+    <div class="phase-dot pd-after"></div>
+    <span class="phase-word pw-after">After</span>
+    <span class="phase-sub ps-after">The vision</span>
+  </div>
+</div>
+
+<!-- ══ PAIRS ══ -->
+<div class="pair-section">
+
+  <!-- 01 -->
+  <div class="pair-block reveal">
+    <div class="side-panel">
+      <div class="side-pair-num">01</div>
+      <div class="side-title">Roof, Eavestrough & Garage Extension</div>
+      <div class="side-rule"></div>
+      <p class="side-desc">The old roof was the barn's most pressing problem — a liability that made everything underneath uncertain. New roofing, proper eavestroughing, and the garage extension change the fundamental character of the building from the moment you arrive.</p>
+      <div class="side-after-box">
+        <div class="side-after-label">What it could be</div>
+        <p class="side-after-text">A protected, weather-tight structure that sets the tone for everything inside — a barn that looks cared for from the road and earns trust before anyone steps through the door.</p>
+      </div>
+    </div>
+    <div class="triplet">
+      <div class="photo-slot slot-before">
+        <img src="FrontBarnOld.png" alt="Before">
+        <div class="phase-badge"><div class="pb-word pb-before">Before</div><div class="pb-line pbl-before"></div></div>
+        <div class="photo-num">01</div>
+      </div>
+      <div class="photo-slot slot-now">
+        <img src="FrontBarnNow.png" alt="Now">
+        <div class="phase-badge"><div class="pb-word pb-now">Now</div><div class="pb-line pbl-now"></div></div>
+      </div>
+      <div class="photo-slot slot-after">
+        <img src="FrontBarn.png" alt="After">
+        <div class="phase-badge"><div class="pb-word pb-after">After</div><div class="pb-line pbl-after"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="pair-block reveal">
+    <div class="side-panel">
+      <div class="side-pair-num">02</div>
+      <div class="side-title">Six New Windows & New Roof Line</div>
+      <div class="side-rule"></div>
+      <p class="side-desc">The second set of six windows along the right side of the barn transforms what was a dark interior into a space flooded with natural light. Paired with the new roof and eavestrough, the whole right face of the barn reads as intentional rather than incidental.</p>
+      <div class="side-after-box">
+        <div class="side-after-label">What it could be</div>
+        <p class="side-after-text">Light is the one thing you can't retrofit into a space cheaply. This barn already has it — six windows of golden afternoon light that make any interior use, from events to studios to rentals, instantly more valuable.</p>
+      </div>
+    </div>
+    <div class="triplet">
+      <div class="photo-slot slot-before">
+        <img src="BarnWindowOld.png" alt="Before">
+        <div class="phase-badge"><div class="pb-word pb-before">Before</div><div class="pb-line pbl-before"></div></div>
+        <div class="photo-num">02</div>
+      </div>
+      <div class="photo-slot slot-now">
+        <img src="BarnWindowNow.png" alt="Now">
+        <div class="phase-badge"><div class="pb-word pb-now">Now</div><div class="pb-line pbl-now"></div></div>
+      </div>
+      <div class="photo-slot slot-after">
+        <img src="BarnWindows.png" alt="After">
+        <div class="phase-badge"><div class="pb-word pb-after">After</div><div class="pb-line pbl-after"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 -->
+  <div class="pair-block reveal">
+    <div class="side-panel">
+      <div class="side-pair-num">03</div>
+      <div class="side-title">Tractor Shed → Three Covered Bays</div>
+      <div class="side-rule"></div>
+      <p class="side-desc">Barely holding together, the old tractor shed was one hard winter away from becoming a problem. What's taken its place is three distinct covered bays — one for the tractor, one for the car, one for tools — each properly sheltered from snow and rain under a new roof.</p>
+      <div class="side-after-box">
+        <div class="side-after-label">What it could be</div>
+        <p class="side-after-text">A fully functional outbuilding that pays for itself in protected storage alone — and makes the whole property feel organised, deliberate, and ready for whatever comes next.</p>
+      </div>
+    </div>
+    <div class="triplet">
+      <div class="photo-slot slot-before">
+        <img src="TractorShedOld.png" alt="Before">
+        <div class="phase-badge"><div class="pb-word pb-before">Before</div><div class="pb-line pbl-before"></div></div>
+        <div class="photo-num">03</div>
+      </div>
+      <div class="photo-slot slot-now">
+        <img src="TractorShedNow.png" alt="Now">
+        <div class="phase-badge"><div class="pb-word pb-now">Now</div><div class="pb-line pbl-now"></div></div>
+      </div>
+      <div class="photo-slot slot-after">
+        <img src="TractorShed.png" alt="After">
+        <div class="phase-badge"><div class="pb-word pb-after">After</div><div class="pb-line pbl-after"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 -->
+  <div class="pair-block reveal">
+    <div class="side-panel">
+      <div class="side-pair-num">04</div>
+      <div class="side-title">Living Room, Fireplace & Kitchen</div>
+      <div class="side-rule"></div>
+      <p class="side-desc">Inside the barn, the living space has gone from raw and rough to something that actually feels like a room — a fireplace anchoring one end, a kitchen taking shape, the whole space gaining the warmth and function that makes people want to stay.</p>
+      <div class="side-after-box">
+        <div class="side-after-label">What it could be</div>
+        <p class="side-after-text">A main living area that's genuinely comfortable — the kind of space that makes guests extend their stay. A fireplace in a barn with exposed beams is not a detail. It's the whole reason to come.</p>
+      </div>
+    </div>
+    <div class="triplet">
+      <div class="photo-slot slot-before">
+        <img src="LivingRoomOld.png" alt="Before">
+        <div class="phase-badge"><div class="pb-word pb-before">Before</div><div class="pb-line pbl-before"></div></div>
+        <div class="photo-num">04</div>
+      </div>
+      <div class="photo-slot slot-now">
+        <img src="LivingRoomNow.png" alt="Now">
+        <div class="phase-badge"><div class="pb-word pb-now">Now</div><div class="pb-line pbl-now"></div></div>
+      </div>
+      <div class="photo-slot slot-after">
+        <img src="LivingRoom.png" alt="After">
+        <div class="phase-badge"><div class="pb-word pb-after">After</div><div class="pb-line pbl-after"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 -->
+  <div class="pair-block reveal">
+    <div class="side-panel">
+      <div class="side-pair-num">05</div>
+      <div class="side-title">Activity Space — Games, Climbing & Yoga</div>
+      <div class="side-rule"></div>
+      <p class="side-desc">A cleaned-up interior reveals just how much volume this barn has — ceiling height that most purpose-built gyms can't match, and a floor plan flexible enough to host a bouldering wall, a yoga studio, or a games room without picking just one.</p>
+      <div class="side-after-box">
+        <div class="side-after-label">What it could be</div>
+        <p class="side-after-text">An activity space that's genuinely rare — a barn-sized room where you can actually do things. Rock climbing, yoga, table tennis, billiards. The kind of amenity that turns a property into a destination.</p>
+      </div>
+    </div>
+    <div class="triplet">
+      <div class="photo-slot slot-before">
+        <img src="FunRoomOld.png" alt="Before">
+        <div class="phase-badge"><div class="pb-word pb-before">Before</div><div class="pb-line pbl-before"></div></div>
+        <div class="photo-num">05</div>
+      </div>
+      <div class="photo-slot slot-now">
+        <img src="FunRoomNow.png" alt="Now">
+        <div class="phase-badge"><div class="pb-word pb-now">Now</div><div class="pb-line pbl-now"></div></div>
+      </div>
+      <div class="photo-slot slot-after">
+        <img src="FunRoom.png" alt="After">
+        <div class="phase-badge"><div class="pb-word pb-after">After</div><div class="pb-line pbl-after"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 -->
+  <div class="pair-block reveal">
+    <div class="side-panel">
+      <div class="side-pair-num">06</div>
+      <div class="side-title">Games Hall & Projector Cinema</div>
+      <div class="side-rule"></div>
+      <p class="side-desc">A large open floor with thick walls and no neighbours — practically designed for a projector screen and surround sound. Add a games area alongside it and you have a space that handles a family of twenty as easily as a quiet evening for two.</p>
+      <div class="side-after-box">
+        <div class="side-after-label">What it could be</div>
+        <p class="side-after-text">A private cinema and games hall that no rental property in the region can offer at this scale. The feature that ends up in every five-star review and every reason a guest books again the following year.</p>
+      </div>
+    </div>
+    <div class="triplet">
+      <div class="photo-slot slot-before">
+        <img src="MovieRoomOld.png" alt="Before">
+        <div class="phase-badge"><div class="pb-word pb-before">Before</div><div class="pb-line pbl-before"></div></div>
+        <div class="photo-num">06</div>
+      </div>
+      <div class="photo-slot slot-now">
+        <img src="MovieRoomNow.png" alt="Now">
+        <div class="phase-badge"><div class="pb-word pb-now">Now</div><div class="pb-line pbl-now"></div></div>
+      </div>
+      <div class="photo-slot slot-after">
+        <img src="MovieRoom.png" alt="After">
+        <div class="phase-badge"><div class="pb-word pb-after">After</div><div class="pb-line pbl-after"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 -->
+  <div class="pair-block reveal">
+    <div class="side-panel">
+      <div class="side-pair-num">07</div>
+      <div class="side-title">Ground Level — Paved Floor & Workshop</div>
+      <div class="side-rule"></div>
+      <p class="side-desc">The ground level of the barn gets paved — instantly transforming a dirt floor into a proper workspace. Storage units and a dedicated workshop area give the building the infrastructure it's needed. Functional, clean, and built to last.</p>
+      <div class="side-after-box">
+        <div class="side-after-label">What it could be</div>
+        <p class="side-after-text">A serious workshop and storage level that adds genuine utility to the property — for woodworking, tools, seasonal equipment, or rented studio space. The kind of infrastructure that makes a property actually work year-round.</p>
+      </div>
+    </div>
+    <div class="triplet">
+      <div class="photo-slot slot-before">
+        <img src="WorkShopOld.png" alt="Before">
+        <div class="phase-badge"><div class="pb-word pb-before">Before</div><div class="pb-line pbl-before"></div></div>
+        <div class="photo-num">07</div>
+      </div>
+      <div class="photo-slot slot-now">
+        <img src="WorkShopNow.png" alt="Now">
+        <div class="phase-badge"><div class="pb-word pb-now">Now</div><div class="pb-line pbl-now"></div></div>
+      </div>
+      <div class="photo-slot slot-after">
+        <img src="Workshop.png" alt="After">
+        <div class="phase-badge"><div class="pb-word pb-after">After</div><div class="pb-line pbl-after"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 -->
+  <div class="pair-block reveal">
+    <div class="side-panel">
+      <div class="side-pair-num">08</div>
+      <div class="side-title">Paved Entry & Organised Car Access</div>
+      <div class="side-rule"></div>
+      <p class="side-desc">The entry to the property tells the story before anything else does. A paved car area clears the ground, defines the space, and gives the eye somewhere to rest. Organisation at the entry point opens up possibilities for how the whole property flows and functions.</p>
+      <div class="side-after-box">
+        <div class="side-after-label">What it could be</div>
+        <p class="side-after-text">A clean, intentional arrival that signals this is a property that has been thought through. Room to park, room to plan, room to grow — the blank-slate clarity that lets the next chapter of the barn actually begin.</p>
+      </div>
+    </div>
+    <div class="triplet">
+      <div class="photo-slot slot-before">
+        <img src="CarViewOld.png" alt="Before">
+        <div class="phase-badge"><div class="pb-word pb-before">Before</div><div class="pb-line pbl-before"></div></div>
+        <div class="photo-num">08</div>
+      </div>
+      <div class="photo-slot slot-now">
+        <img src="CarViewNow.png" alt="Now">
+        <div class="phase-badge"><div class="pb-word pb-now">Now</div><div class="pb-line pbl-now"></div></div>
+      </div>
+      <div class="photo-slot slot-after">
+        <img src="CarsView.png" alt="After">
+        <div class="phase-badge"><div class="pb-word pb-after">After</div><div class="pb-line pbl-after"></div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer">
+  <p class="footer-title">The Barn Project</p>
+  <div class="footer-divider"></div>
+  <p class="footer-bottom">A private family document · All content confidential</p>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05 });
+  els.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
